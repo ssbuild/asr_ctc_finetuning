@@ -3,9 +3,6 @@
 # @FileName: infer
 import os
 import sys
-
-
-
 sys.path.append(os.path.join(os.path.dirname(__file__),'..'))
 
 import torch
@@ -34,21 +31,20 @@ if __name__ == '__main__':
     model.half().cuda()
 
     sample = Audio(sampling_rate=processor.feature_extractor.sampling_rate).decode_example({
-        "path": "../assets/zh-CN_train_0/common_voice_zh-CN_18654294.mp3", "bytes": None
+        "path": "../assets/librispeech_asr_dummy/1272-128104-0000.flac", "bytes": None
     })
 
-    input_features = processor(sample["array"], sampling_rate=sample["sampling_rate"],
-                               return_tensors="pt").input_features
+    input_values = processor(sample["array"], sampling_rate=sample["sampling_rate"],
+                               return_tensors="pt").input_values
 
-    input_features = input_features.half().to(model.device)
+    input_values = input_values.half().to(model.device)
 
-    # generate token ids
-    predicted_ids = model.generate(input_features, forced_decoder_ids=forced_decoder_ids)
-    # decode token ids to text
-    transcription = processor.batch_decode(predicted_ids)
+    # INFERENCE
 
+    # retrieve logits & take argmax
+    logits = model(input_values,return_dict=True).logits
+    predicted_ids = torch.argmax(logits, dim=-1)
+
+    # transcribe
+    transcription = processor.decode(predicted_ids[0])
     print(transcription)
-    # ['<|startoftranscript|><|zh|><|transcribe|><|notimestamps|>他后来捧去打他两个儿光<|endoftext|>']
-    transcription = processor.batch_decode(predicted_ids, skip_special_tokens=True)
-    print(transcription)
-    # ['他后来捧去打他两个儿光']

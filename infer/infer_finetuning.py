@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     processor = dataHelper.processor
     config.forced_decoder_ids = None
-    forced_decoder_ids = processor.get_decoder_prompt_ids(language="chinese", task="transcribe")
+
 
     
     pl_model = MyTransformer(config=config, model_args=model_args,torch_dtype=config.torch_dtype,)
@@ -53,20 +53,20 @@ if __name__ == '__main__':
     model.eval().half().cuda()
 
     sample = Audio(sampling_rate=processor.feature_extractor.sampling_rate).decode_example({
-        "path": "../assets/zh-CN_train_0/common_voice_zh-CN_18654294.mp3", "bytes": None
+        "path": "../assets/librispeech_asr_dummy/1272-128104-0000.flac", "bytes": None
     })
 
-    input_features = processor(sample["array"], sampling_rate=sample["sampling_rate"],
-                               return_tensors="pt").input_features
+    input_values = processor(sample["array"], sampling_rate=sample["sampling_rate"],
+                             return_tensors="pt").input_values
 
-    input_features = input_features.half().to(model.device)
-    # generate token ids
-    predicted_ids = model.generate(input_features, forced_decoder_ids=forced_decoder_ids)
-    # decode token ids to text
-    transcription = processor.batch_decode(predicted_ids)
+    input_values = input_values.half().to(model.device)
 
-    print(transcription)
+    # INFERENCE
 
-    transcription = processor.batch_decode(predicted_ids, skip_special_tokens=True)
+    # retrieve logits & take argmax
+    logits = model(input_values,return_dict=True).logits
+    predicted_ids = torch.argmax(logits, dim=-1)
 
+    # transcribe
+    transcription = processor.decode(predicted_ids[0])
     print(transcription)

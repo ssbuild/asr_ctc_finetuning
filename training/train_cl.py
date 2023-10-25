@@ -117,7 +117,7 @@ def main():
                             quantization_config=global_args["quantization_config"],
                             device_map={"": local_rank} if world_size > 1 else "auto",
                             torch_dtype=torch.float16,
-                            new_num_tokens=len(tokenizer),  # 可能扩充词
+                            
                             )
 
     if transformer_args["quantization_config"] is None:

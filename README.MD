@@ -2,7 +2,7 @@
    - [deep_training](https://github.com/ssbuild/deep_training)
 
 ```text
-    10-24 initial asr seq2seq
+    10-24 initial asr ctc
 ```
    
 
@@ -14,8 +14,14 @@
 
 ## weigtht select one is suitable for you
 支持且不限于以下权重    
-- [whisper-large-v2](https://huggingface.co/openai/whisper-large-v2)
-- [whisper-large](https://huggingface.co/openai/whisper-large)
+- [wav2vec2-base-100h](https://huggingface.co/facebook/wav2vec2-base-100h)
+- [wav2vec2-base-960h](https://huggingface.co/facebook/wav2vec2-base-960h)
+- [wav2vec2-large-960h](https://huggingface.co/facebook/wav2vec2-large-960h)
+- [wav2vec2-large-960h-lv60-self](https://huggingface.co/facebook/wav2vec2-large-960h-lv60-self)
+- [wav2vec2-base](https://huggingface.co/facebook/wav2vec2-base)
+- [wav2vec2-large](https://huggingface.co/facebook/wav2vec2-large)
+- [wavlm-base-plus](https://huggingface.co/microsoft/wavlm-base-plus)
+- [wavlm-base](https://huggingface.co/microsoft/wavlm-base)
 
 
 ## data sample
@@ -25,11 +31,7 @@
    
 单条数据示例
 ```json
-{
-  "path": "../zh-CN_train_0/common_voice_zh-CN_33211332.mp3",
-  "sentence": "性喜温暖润湿气候且耐寒。",
-  "locale": "zh-CN"
-}
+{"file": "../assets/librispeech_asr_dummy/1272-128104-0000.flac", "sentence": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL"}
 ```
 
 
@@ -48,8 +50,6 @@
     bash train_full.sh -m dataset 
     or
     bash train_lora.sh -m dataset 
-    or
-    bash train_ptv2.sh -m dataset 
     
     注: num_process_worker 为多进程制作数据 ， 如果数据量较大 ， 适当调大至cpu数量
     dataHelper.make_dataset_with_args(data_args.train_file,mixed_data=False, shuffle=True,mode='train',num_process_worker=0)
@@ -59,9 +59,6 @@
         
     # lora adalora ia3 
         bash train_lora.sh -m train
-        
-    # ptv2
-        bash train_ptv2.sh -m train
 ```
    
 
@@ -85,6 +82,11 @@
 ## 
     纯粹而干净的代码
 
+
+## 参考
+
+https://github.com/facebookresearch/fairseq/tree/main/examples/wav2vec#wav2vec-20
+
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ssbuild/asr_seq2seq_finetuning&type=Date)](https://star-history.com/#ssbuild/asr_seq2seq_finetuning&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=ssbuild/asr_ctc_finetuning&type=Date)](https://star-history.com/#ssbuild/asr_ctc_finetuning&Date)
