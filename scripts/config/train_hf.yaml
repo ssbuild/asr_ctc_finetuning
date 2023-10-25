@@ -79,12 +79,7 @@ max_duration_in_seconds: 20
 min_duration_in_seconds: 0
 sampling_rate: null
 data_custom:
-   labels_do_lower_case: true
 
-   language: "chinese"
-   # one of  [transcribe,translate]
-   # `transcribe` for speech recognition or `translate` for speech translation.
-   task: "transcribe"
 
 ##############  lora模块
 
