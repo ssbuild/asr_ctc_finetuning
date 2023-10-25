@@ -26,8 +26,7 @@
 
 ## data sample
 - open_data https://github.com/ssbuild/open_data
-- common_voice_11_0 https://huggingface.co/datasets/mozilla-foundation/common_voice_11_0
-- common_voice https://huggingface.co/datasets/common_voice
+- librispeech_asr_dummy https://huggingface.co/datasets/patrickvonplaten/librispeech_asr_dummy
    
 单条数据示例
 ```json
